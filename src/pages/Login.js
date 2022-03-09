@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { tokenController } from '../actions/index';
+import { tokenController, setNewPlayer } from '../actions/index';
 import Input from '../components/Input';
 import Button from '../components/Button';
 
@@ -38,10 +38,12 @@ class Login extends Component {
 
   startGame = () => {
     const { dispatch } = this.props;
+    const { nameValue, emailValue } = this.state;
+    dispatch(setNewPlayer(emailValue, nameValue));
     dispatch(tokenController());
-    // this.setState({
-    //   redirectToGame: true,
-    // });
+    this.setState({
+      redirectToGame: true,
+    });
   }
 
   handleChange = ({ target }) => {
