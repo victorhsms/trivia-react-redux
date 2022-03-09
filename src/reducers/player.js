@@ -1,19 +1,22 @@
 import { EMAIL_USER } from '../actions/index';
 
 const INITIAL_STATE = {
-  email: '',
+  name: '',
+  assertions: '',
+  score: '',
+  gravaterEmail: '',
 };
 
-const userReducer = (state = INITIAL_STATE, action) => {
+const playerReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
   case EMAIL_USER:
     return {
       ...state,
-      email: action.email,
+      gravatarEmail: action.email,
     };
   default:
     return state;
   }
 };
 
-export default userReducer;
+export default playerReducer;
