@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import Input from '../components/Input';
 import Button from '../components/Button';
+import SettingsButton from '../components/SettingsButton';
 
 class Login extends Component {
   constructor() {
@@ -39,6 +40,11 @@ class Login extends Component {
     });
   }
 
+  handleClickSettings = () => {
+    const { history } = this.props;
+    history.push('/settings');
+  }
+
   render() {
     const { nameValue, emailValue, btnStatus } = this.state;
     return (
@@ -67,13 +73,19 @@ class Login extends Component {
           disabled={ btnStatus }
           onClick={ () => {} }
         />
+        <SettingsButton
+          onClick={ this.handleClickSettings }
+        />
+
       </div>
     );
   }
 }
 
 Login.propTypes = {
-
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
 };
 
 export default Login;
