@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Input from '../components/Input';
 import Button from '../components/Button';
-import SettingsButton from '../components/SettingsButton';
 
 class Login extends Component {
   constructor() {
@@ -73,10 +72,12 @@ class Login extends Component {
           disabled={ btnStatus }
           onClick={ () => {} }
         />
-        <SettingsButton
+        <Button
+          textMessage="Configurações"
+          id="btn-settings"
+          disabled={ false }
           onClick={ this.handleClickSettings }
         />
-
       </div>
     );
   }
