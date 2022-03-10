@@ -6,7 +6,7 @@ import Header from '../components/Header';
 class Feedback extends Component {
   render() {
     const { score } = this.props;
-    const MIN_SCORE = 2;
+    const MIN_SCORE = 3;
     const placar = Number(score);
     let message;
 
