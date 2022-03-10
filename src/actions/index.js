@@ -1,6 +1,25 @@
-export const EMAIL_USER = 'EMAIL_USER';
+import getNewToken from '../services/getNewToken';
 
-export const setEmail = (emailUser) => ({
-  type: EMAIL_USER,
-  email: emailUser,
+export const NEW_PLAYER = 'NEW_PLAYER';
+export const NEW_TOKEN = 'NEW_TOKEN';
+
+export const setNewPlayer = (emailPlayer, namePlayer) => ({
+  type: NEW_PLAYER,
+  email: emailPlayer,
+  name: namePlayer,
 });
+
+export const setNewToken = (token) => ({
+  type: NEW_TOKEN,
+  token,
+});
+
+export const tokenController = () => async (dispatch) => {
+  let newToken = localStorage.getItem('token');
+  if (newToken === null) {
+    newToken = await getNewToken();
+    localStorage.setItem('token', newToken);
+  }
+
+  dispatch(setNewToken(newToken));
+};
