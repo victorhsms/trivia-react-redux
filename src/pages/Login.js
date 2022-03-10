@@ -53,6 +53,11 @@ class Login extends Component {
     });
   }
 
+  handleClickSettings = () => {
+    const { history } = this.props;
+    history.push('/settings');
+  }
+
   render() {
     const { nameValue, emailValue, btnStatus, redirectToGame } = this.state;
     return (
@@ -85,6 +90,12 @@ class Login extends Component {
                 disabled={ btnStatus }
                 onClick={ this.startGame }
               />
+              <Button
+                textMessage="Configurações"
+                id="btn-settings"
+                disabled={ false }
+                onClick={ this.handleClickSettings }
+              />
             </div>
           )}
       </div>
@@ -93,6 +104,9 @@ class Login extends Component {
 }
 
 Login.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 
