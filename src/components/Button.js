@@ -8,6 +8,7 @@ class Button extends Component {
       id,
       disabled,
       onClick,
+      className,
     } = this.props;
     return (
       <button
@@ -16,6 +17,7 @@ class Button extends Component {
         data-testid={ id }
         disabled={ disabled }
         onClick={ onClick }
+        className={ className }
       >
         { textMessage }
       </button>
@@ -26,6 +28,7 @@ class Button extends Component {
 Button.propTypes = {
   textMessage: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
+  className: PropTypes.string.isRequired,
   disabled: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
 };
