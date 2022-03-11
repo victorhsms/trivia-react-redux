@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { scoreController } from '../actions/index';
 import Button from './Button';
 import '../App.css';
 
@@ -31,14 +33,23 @@ class Question extends Component {
   }
 
   onClickCorrectAnswer = () => {
-    const { showBtnNext } = this.props;
+    const {
+      showBtnNext,
+      dispatch,
+      score,
+      name,
+      difficulty,
+      currentSecond,
+    } = this.props;
     showBtnNext();
+    dispatch(scoreController(score, difficulty, currentSecond, name));
+
+    console.log('correto');
     this.changeColor();
   }
 
-  onClickIncorrectAnswer = ({ target }) => {
+  onClickIncorrectAnswer = () => {
     const { showBtnNext } = this.props;
-    const { id } = target;
     showBtnNext();
     this.changeColor();
   }
@@ -61,7 +72,7 @@ class Question extends Component {
       disabled,
     } = this.props;
 
-    const { allAnswers } = this.state;
+    const { allAnswers, correctclass, wrongclass } = this.state;
 
     return (
       <div>
@@ -118,6 +129,15 @@ Question.propTypes = {
   incorrectAnswers: PropTypes.string.isRequired,
   disabled: PropTypes.bool.isRequired,
   showBtnNext: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  score: PropTypes.number.isRequired,
+  currentSecond: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
 };
 
-export default Question;
+const mapStateToProps = (state) => ({
+  score: state.player.score,
+  name: state.player.name,
+});
+
+export default connect(mapStateToProps)(Question);

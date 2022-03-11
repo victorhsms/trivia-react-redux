@@ -26,9 +26,7 @@ class Game extends Component {
   async componentDidMount() {
     const { token } = this.props;
     let questions = await getQuestions(token);
-    console.log(' asiajsoiajsioajsoijaiosjaios', questions);
     if (questions.length === 0) {
-      console.log('AQUI AQUI AQUI', questions);
       const newToken = await getNewToken();
       questions = await getQuestions(newToken);
     }
@@ -70,6 +68,26 @@ class Game extends Component {
         numberQuestion: numberQuestion + 1,
         nextQuestion: false,
       });
+    }
+  }
+
+  finalScore = (score, name) => {
+    const imgGravatar = localStorage.getItem('gravatarUrl');
+    const currentPlayer = {
+      name,
+      score,
+      picture: imgGravatar,
+    };
+
+    const rankingStorage = localStorage.getItem('ranking');
+    const ranking = rankingStorage ? JSON.parse(rankingStorage) : [];
+
+    if (ranking.length !== 0) {
+      const newRanking = [...ranking, currentPlayer];
+      localStorage.setItem('ranking', newRanking);
+    } else {
+      const newRanking = [currentPlayer];
+      localStorage.setItem('ranking', newRanking);
     }
   }
 
@@ -116,6 +134,7 @@ class Game extends Component {
                 correctAnswer={ correctAnswer }
                 incorrectAnswers={ incorrectAnswers }
                 disabled={ disabledButtons }
+                currentSecond={ seconds }
                 showBtnNext={ this.showBtnNext }
               />
               <h3>{ `Tempo restante: ${seconds}` }</h3>
