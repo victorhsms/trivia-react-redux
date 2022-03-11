@@ -4,10 +4,14 @@ import Button from './Button';
 
 class Question extends Component {
   onClickCorrectAnswer = () => {
+    const { showBtnNext } = this.props;
+    showBtnNext();
     console.log('correto');
   }
 
   onClickIncorrectAnswer = () => {
+    const { showBtnNext } = this.props;
+    showBtnNext();
     console.log('falso');
   }
 
@@ -76,6 +80,7 @@ Question.propTypes = {
   number: PropTypes.number.isRequired,
   correctAnswer: PropTypes.string.isRequired,
   incorrectAnswers: PropTypes.string.isRequired,
+  showBtnNext: PropTypes.func.isRequired,
 };
 
 export default Question;
