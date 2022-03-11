@@ -3,8 +3,35 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { scoreController } from '../actions/index';
 import Button from './Button';
+import '../App.css';
 
 class Question extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      allAnswers: [],
+      correctclass: '',
+      wrongclass: '',
+    };
+  }
+
+  componentDidMount() {
+    const {
+      correctAnswer,
+      incorrectAnswers,
+    } = this.props;
+
+    const newAnswers = incorrectAnswers === undefined
+      ? [] : [...incorrectAnswers, correctAnswer];
+    const RANGE_ALEATORIETY = 0.5;
+    const allAnswers = newAnswers.sort(() => Math.random() - RANGE_ALEATORIETY);
+
+    this.setState({
+      allAnswers,
+    });
+  }
+
   onClickCorrectAnswer = () => {
     const {
       showBtnNext,
@@ -15,17 +42,23 @@ class Question extends Component {
       currentSecond,
     } = this.props;
     showBtnNext();
-
     dispatch(scoreController(score, difficulty, currentSecond, name));
 
     console.log('correto');
+    this.changeColor();
   }
 
   onClickIncorrectAnswer = () => {
     const { showBtnNext } = this.props;
     showBtnNext();
+    this.changeColor();
+  }
 
-    console.log('falso');
+  changeColor = () => {
+    this.setState({
+      correctclass: 'correct-answer',
+      wrongclass: 'wrong-answer',
+    });
   }
 
   render() {
@@ -36,26 +69,25 @@ class Question extends Component {
       difficulty,
       number,
       correctAnswer,
-      incorrectAnswers,
+      disabled,
     } = this.props;
-    const newAnswers = incorrectAnswers === undefined
-      ? [] : [...incorrectAnswers, correctAnswer];
-    const RANGE_ALEATORIETY = 0.5;
-    const allAnswers = newAnswers.sort(() => Math.random() - RANGE_ALEATORIETY);
+
+    const { allAnswers, correctclass, wrongclass } = this.state;
+
     return (
       <div>
         <h3
           data-testid="question-category"
         >
-          Categoria:
+          Categoria:&nbsp;
           <span>{ category }</span>
         </h3>
         <p>
-          Tipo:
+          Tipo:&nbsp;
           { type }
         </p>
         <p>
-          Dificuldade:
+          Dificuldade:&nbsp;
           { difficulty }
         </p>
         <h2
@@ -71,9 +103,11 @@ class Question extends Component {
             <Button
               key={ answer }
               textMessage={ answer }
+              className={ answer === correctAnswer
+                ? correctclass : wrongclass }
               id={ answer === correctAnswer
                 ? 'correct-answer' : `wrong-answer-${index === 0 ? index : index - 1}` }
-              disabled={ false }
+              disabled={ disabled }
               onClick={ answer === correctAnswer
                 ? this.onClickCorrectAnswer
                 : this.onClickIncorrectAnswer }
@@ -93,6 +127,7 @@ Question.propTypes = {
   number: PropTypes.number.isRequired,
   correctAnswer: PropTypes.string.isRequired,
   incorrectAnswers: PropTypes.string.isRequired,
+  disabled: PropTypes.bool.isRequired,
   showBtnNext: PropTypes.func.isRequired,
   dispatch: PropTypes.func.isRequired,
   score: PropTypes.number.isRequired,

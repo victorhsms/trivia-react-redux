@@ -15,11 +15,11 @@ class Header extends Component {
           <img data-testid="header-profile-picture" src={ URL } alt={ name } />
         </div>
         <div data-testid="header-player-name">
-          Nome:
+          Nome:&nbsp;
           { name }
         </div>
         <div data-testid="header-score">
-          Placar:
+          Placar:&nbsp;
           { score }
         </div>
       </div>
