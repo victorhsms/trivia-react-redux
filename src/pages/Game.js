@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import getQuestions from '../services/getQuestions';
 import getNewToken from '../services/getNewToken';
 import Question from '../components/Question';
+import Button from '../components/Button';
 
 class Game extends Component {
   constructor() {
@@ -13,6 +14,7 @@ class Game extends Component {
     this.state = {
       allQuestions: [],
       numberQuestion: 0,
+      nextQuestion: false,
     };
   }
 
@@ -30,8 +32,25 @@ class Game extends Component {
     });
   }
 
+  showBtnNext = () => {
+    this.setState({
+      nextQuestion: true,
+    });
+  }
+
+  goToNextQuestion = () => {
+    const { numberQuestion } = this.state;
+    const LAST_QUESTION = 4;
+    if (numberQuestion < LAST_QUESTION) {
+      this.setState({
+        numberQuestion: numberQuestion + 1,
+        nextQuestion: false,
+      });
+    }
+  }
+
   render() {
-    const { allQuestions, numberQuestion } = this.state;
+    const { allQuestions, numberQuestion, nextQuestion } = this.state;
     let renderQuestion;
     if (allQuestions === []) {
       renderQuestion = [];
@@ -65,9 +84,18 @@ class Game extends Component {
               question={ question }
               correctAnswer={ correctAnswer }
               incorrectAnswers={ incorrectAnswers }
+              showBtnNext={ this.showBtnNext }
             />
           );
         })}
+        { nextQuestion && (
+          <Button
+            textMessage="Next"
+            id="btn-next"
+            disabled={ false }
+            onClick={ this.goToNextQuestion }
+          />
+        )}
       </div>
     );
   }
