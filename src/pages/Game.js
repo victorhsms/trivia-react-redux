@@ -6,6 +6,8 @@ import getQuestions from '../services/getQuestions';
 import getNewToken from '../services/getNewToken';
 import Question from '../components/Question';
 
+const TIME = 1000;
+
 class Game extends Component {
   constructor() {
     super();
@@ -13,6 +15,7 @@ class Game extends Component {
     this.state = {
       allQuestions: [],
       numberQuestion: 0,
+      seconds: 5,
     };
   }
 
@@ -28,6 +31,10 @@ class Game extends Component {
     this.setState({
       allQuestions: questions,
     });
+
+    this.myInterval = setInterval(() => {
+      this.setState((prevState) => ({ seconds: prevState.seconds - 1 }));
+    }, TIME);
   }
 
   render() {
