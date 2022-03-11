@@ -1,17 +1,30 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { scoreController } from '../actions/index';
 import Button from './Button';
 
 class Question extends Component {
   onClickCorrectAnswer = () => {
-    const { showBtnNext } = this.props;
+    const {
+      showBtnNext,
+      dispatch,
+      score,
+      name,
+      difficulty,
+      currentSecond,
+    } = this.props;
     showBtnNext();
+
+    dispatch(scoreController(score, difficulty, currentSecond, name));
+
     console.log('correto');
   }
 
   onClickIncorrectAnswer = () => {
     const { showBtnNext } = this.props;
     showBtnNext();
+
     console.log('falso');
   }
 
@@ -81,6 +94,15 @@ Question.propTypes = {
   correctAnswer: PropTypes.string.isRequired,
   incorrectAnswers: PropTypes.string.isRequired,
   showBtnNext: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  score: PropTypes.number.isRequired,
+  currentSecond: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
 };
 
-export default Question;
+const mapStateToProps = (state) => ({
+  score: state.player.score,
+  name: state.player.name,
+});
+
+export default connect(mapStateToProps)(Question);
