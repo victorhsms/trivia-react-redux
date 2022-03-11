@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import getQuestions from '../services/getQuestions';
 import getNewToken from '../services/getNewToken';
 import Question from '../components/Question';
+import Button from '../components/Button';
 
 const TIME = 1000;
 
@@ -18,6 +19,7 @@ class Game extends Component {
       seconds: 30,
       disabledButtons: false,
       activeTime: true,
+      nextQuestion: false,
     };
   }
 
@@ -54,8 +56,31 @@ class Game extends Component {
     }
   }
 
+  showBtnNext = () => {
+    this.setState({
+      nextQuestion: true,
+    });
+  }
+
+  goToNextQuestion = () => {
+    const { numberQuestion } = this.state;
+    const LAST_QUESTION = 4;
+    if (numberQuestion < LAST_QUESTION) {
+      this.setState({
+        numberQuestion: numberQuestion + 1,
+        nextQuestion: false,
+      });
+    }
+  }
+
   render() {
-    const { allQuestions, numberQuestion, seconds, disabledButtons } = this.state;
+    const {
+      allQuestions,
+      numberQuestion,
+      seconds,
+      disabledButtons,
+      nextQuestion,
+    } = this.state;
     let renderQuestion;
     if (allQuestions === []) {
       renderQuestion = [];
@@ -91,11 +116,20 @@ class Game extends Component {
                 correctAnswer={ correctAnswer }
                 incorrectAnswers={ incorrectAnswers }
                 disabled={ disabledButtons }
+                showBtnNext={ this.showBtnNext }
               />
               <h3>{ `Tempo restante: ${seconds}` }</h3>
             </>
           );
         })}
+        { nextQuestion && (
+          <Button
+            textMessage="Next"
+            id="btn-next"
+            disabled={ false }
+            onClick={ this.goToNextQuestion }
+          />
+        )}
       </div>
     );
   }

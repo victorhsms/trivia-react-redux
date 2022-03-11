@@ -28,10 +28,14 @@ class Question extends Component {
   }
 
   onClickCorrectAnswer = () => {
+    const { showBtnNext } = this.props;
+    showBtnNext();
     console.log('correto');
   }
 
   onClickIncorrectAnswer = () => {
+    const { showBtnNext } = this.props;
+    showBtnNext();
     console.log('falso');
   }
 
@@ -99,6 +103,7 @@ Question.propTypes = {
   correctAnswer: PropTypes.string.isRequired,
   incorrectAnswers: PropTypes.string.isRequired,
   disabled: PropTypes.bool.isRequired,
+  showBtnNext: PropTypes.func.isRequired,
 };
 
 export default Question;
