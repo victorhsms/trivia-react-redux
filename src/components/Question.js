@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from './Button';
+import '../App.css';
 
 class Question extends Component {
   constructor() {
@@ -8,6 +9,8 @@ class Question extends Component {
 
     this.state = {
       allAnswers: [],
+      correctclass: '',
+      wrongclass: '',
     };
   }
 
@@ -30,13 +33,21 @@ class Question extends Component {
   onClickCorrectAnswer = () => {
     const { showBtnNext } = this.props;
     showBtnNext();
-    console.log('correto');
+    this.changeColor();
   }
 
-  onClickIncorrectAnswer = () => {
+  onClickIncorrectAnswer = ({ target }) => {
     const { showBtnNext } = this.props;
+    const { id } = target;
     showBtnNext();
-    console.log('falso');
+    this.changeColor();
+  }
+
+  changeColor = () => {
+    this.setState({
+      correctclass: 'correct-answer',
+      wrongclass: 'wrong-answer',
+    });
   }
 
   render() {
@@ -51,6 +62,7 @@ class Question extends Component {
     } = this.props;
 
     const { allAnswers } = this.state;
+
     return (
       <div>
         <h3
@@ -80,6 +92,8 @@ class Question extends Component {
             <Button
               key={ answer }
               textMessage={ answer }
+              className={ answer === correctAnswer
+                ? correctclass : wrongclass }
               id={ answer === correctAnswer
                 ? 'correct-answer' : `wrong-answer-${index === 0 ? index : index - 1}` }
               disabled={ disabled }
