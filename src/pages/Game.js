@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
-import { tokenController } from '../actions/index';
 import getQuestions from '../services/getQuestions';
+import getNewToken from '../services/getNewToken';
 import Question from '../components/Question';
 
 class Game extends Component {
@@ -17,14 +17,13 @@ class Game extends Component {
   }
 
   async componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch(tokenController());
     const { token } = this.props;
     let questions = await getQuestions(token);
-    if (questions === []) {
-      Storage.removeItem('token');
-      dispatch(tokenController());
-      questions = await getQuestions(token);
+    console.log(' asiajsoiajsioajsoijaiosjaios', questions);
+    if (questions.length === 0) {
+      console.log('AQUI AQUI AQUI', questions);
+      const newToken = await getNewToken();
+      questions = await getQuestions(newToken);
     }
     this.setState({
       allQuestions: questions,
@@ -76,7 +75,6 @@ class Game extends Component {
 
 Game.propTypes = {
   token: PropTypes.string.isRequired,
-  dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
