@@ -15,11 +15,8 @@ export const setNewToken = (token) => ({
 });
 
 export const tokenController = () => async (dispatch) => {
-  let newToken = localStorage.getItem('token');
-  if (newToken === null) {
-    newToken = await getNewToken();
-    localStorage.setItem('token', newToken);
-  }
+  const newToken = await getNewToken();
+  localStorage.setItem('token', newToken);
 
   dispatch(setNewToken(newToken));
 };
