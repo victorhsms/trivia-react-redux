@@ -15,7 +15,9 @@ class Game extends Component {
     this.state = {
       allQuestions: [],
       numberQuestion: 0,
-      seconds: 5,
+      seconds: 30,
+      disabledButtons: false,
+      activeTime: true,
     };
   }
 
@@ -37,8 +39,23 @@ class Game extends Component {
     }, TIME);
   }
 
+  componentDidUpdate() {
+    this.stopTime();
+  }
+
+  stopTime = () => {
+    const { seconds, activeTime } = this.state;
+    if (seconds === 0 && activeTime) {
+      clearInterval(this.myInterval);
+      this.setState({
+        disabledButtons: true,
+        activeTime: false,
+      });
+    }
+  }
+
   render() {
-    const { allQuestions, numberQuestion } = this.state;
+    const { allQuestions, numberQuestion, seconds, disabledButtons } = this.state;
     let renderQuestion;
     if (allQuestions === []) {
       renderQuestion = [];
@@ -63,16 +80,20 @@ class Game extends Component {
           } = asks;
 
           return (
-            <Question
-              key={ index }
-              category={ category }
-              number={ index }
-              type={ type }
-              difficulty={ difficulty }
-              question={ question }
-              correctAnswer={ correctAnswer }
-              incorrectAnswers={ incorrectAnswers }
-            />
+            <>
+              <Question
+                key={ index }
+                category={ category }
+                number={ index }
+                type={ type }
+                difficulty={ difficulty }
+                question={ question }
+                correctAnswer={ correctAnswer }
+                incorrectAnswers={ incorrectAnswers }
+                disabled={ disabledButtons }
+              />
+              <h3>{ `Tempo restante: ${seconds}` }</h3>
+            </>
           );
         })}
       </div>

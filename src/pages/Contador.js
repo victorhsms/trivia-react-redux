@@ -6,7 +6,7 @@ class Contador extends React.Component {
   constructor() {
     super();
     this.state = {
-      seconds: 5,
+      seconds: 30,
       contador: 0,
     };
   }
