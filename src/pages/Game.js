@@ -46,6 +46,9 @@ class Game extends Component {
         numberQuestion: numberQuestion + 1,
         nextQuestion: false,
       });
+    } else {
+      const { history } = this.props;
+      history.push('/feedback');
     }
   }
 
@@ -103,6 +106,9 @@ class Game extends Component {
 
 Game.propTypes = {
   token: PropTypes.string.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
 };
 
 const mapStateToProps = (state) => ({
