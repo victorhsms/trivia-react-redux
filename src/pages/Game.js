@@ -7,6 +7,8 @@ import getNewToken from '../services/getNewToken';
 import Question from '../components/Question';
 import Button from '../components/Button';
 
+const TIME = 1000;
+
 class Game extends Component {
   constructor() {
     super();
@@ -14,6 +16,9 @@ class Game extends Component {
     this.state = {
       allQuestions: [],
       numberQuestion: 0,
+      seconds: 30,
+      disabledButtons: false,
+      activeTime: true,
       nextQuestion: false,
     };
   }
@@ -30,6 +35,25 @@ class Game extends Component {
     this.setState({
       allQuestions: questions,
     });
+
+    this.myInterval = setInterval(() => {
+      this.setState((prevState) => ({ seconds: prevState.seconds - 1 }));
+    }, TIME);
+  }
+
+  componentDidUpdate() {
+    this.stopTime();
+  }
+
+  stopTime = () => {
+    const { seconds, activeTime } = this.state;
+    if (seconds === 0 && activeTime) {
+      clearInterval(this.myInterval);
+      this.setState({
+        disabledButtons: true,
+        activeTime: false,
+      });
+    }
   }
 
   showBtnNext = () => {
@@ -50,7 +74,13 @@ class Game extends Component {
   }
 
   render() {
-    const { allQuestions, numberQuestion, nextQuestion } = this.state;
+    const {
+      allQuestions,
+      numberQuestion,
+      seconds,
+      disabledButtons,
+      nextQuestion,
+    } = this.state;
     let renderQuestion;
     if (allQuestions === []) {
       renderQuestion = [];
@@ -75,17 +105,21 @@ class Game extends Component {
           } = asks;
 
           return (
-            <Question
-              key={ index }
-              category={ category }
-              number={ index }
-              type={ type }
-              difficulty={ difficulty }
-              question={ question }
-              correctAnswer={ correctAnswer }
-              incorrectAnswers={ incorrectAnswers }
-              showBtnNext={ this.showBtnNext }
-            />
+            <>
+              <Question
+                key={ index }
+                category={ category }
+                number={ index }
+                type={ type }
+                difficulty={ difficulty }
+                question={ question }
+                correctAnswer={ correctAnswer }
+                incorrectAnswers={ incorrectAnswers }
+                disabled={ disabledButtons }
+                showBtnNext={ this.showBtnNext }
+              />
+              <h3>{ `Tempo restante: ${seconds}` }</h3>
+            </>
           );
         })}
         { nextQuestion && (

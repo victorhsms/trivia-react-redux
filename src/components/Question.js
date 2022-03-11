@@ -6,18 +6,34 @@ import '../App.css';
 class Question extends Component {
   constructor() {
     super();
+
     this.state = {
+      allAnswers: [],
       correctclass: '',
       wrongclass: '',
     };
   }
 
-  onClickCorrectAnswer = (target) => {
+  componentDidMount() {
+    const {
+      correctAnswer,
+      incorrectAnswers,
+    } = this.props;
+
+    const newAnswers = incorrectAnswers === undefined
+      ? [] : [...incorrectAnswers, correctAnswer];
+    const RANGE_ALEATORIETY = 0.5;
+    const allAnswers = newAnswers.sort(() => Math.random() - RANGE_ALEATORIETY);
+
+    this.setState({
+      allAnswers,
+    });
+  }
+
+  onClickCorrectAnswer = () => {
     const { showBtnNext } = this.props;
     showBtnNext();
     this.changeColor();
-    console.log('correto');
-    console.log(target);
   }
 
   onClickIncorrectAnswer = ({ target }) => {
@@ -25,8 +41,6 @@ class Question extends Component {
     const { id } = target;
     showBtnNext();
     this.changeColor();
-    console.log('falso');
-    console.log(id);
   }
 
   changeColor = () => {
@@ -44,27 +58,25 @@ class Question extends Component {
       difficulty,
       number,
       correctAnswer,
-      incorrectAnswers,
+      disabled,
     } = this.props;
-    const { correctclass, wrongclass } = this.state;
-    const newAnswers = incorrectAnswers === undefined
-      ? [] : [...incorrectAnswers, correctAnswer];
-    const RANGE_ALEATORIETY = 0.5;
-    const allAnswers = newAnswers.sort(() => Math.random() - RANGE_ALEATORIETY);
+
+    const { allAnswers } = this.state;
+
     return (
       <div>
         <h3
           data-testid="question-category"
         >
-          Categoria:
+          Categoria:&nbsp;
           <span>{ category }</span>
         </h3>
         <p>
-          Tipo:
+          Tipo:&nbsp;
           { type }
         </p>
         <p>
-          Dificuldade:
+          Dificuldade:&nbsp;
           { difficulty }
         </p>
         <h2
@@ -84,7 +96,7 @@ class Question extends Component {
                 ? correctclass : wrongclass }
               id={ answer === correctAnswer
                 ? 'correct-answer' : `wrong-answer-${index === 0 ? index : index - 1}` }
-              disabled={ false }
+              disabled={ disabled }
               onClick={ answer === correctAnswer
                 ? this.onClickCorrectAnswer
                 : this.onClickIncorrectAnswer }
@@ -104,6 +116,7 @@ Question.propTypes = {
   number: PropTypes.number.isRequired,
   correctAnswer: PropTypes.string.isRequired,
   incorrectAnswers: PropTypes.string.isRequired,
+  disabled: PropTypes.bool.isRequired,
   showBtnNext: PropTypes.func.isRequired,
 };
 
