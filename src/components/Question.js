@@ -21,7 +21,8 @@ class Question extends Component {
       correctAnswer,
       incorrectAnswers,
     } = this.props;
-    const newAnswers = [...incorrectAnswers, correctAnswer];
+    const newAnswers = incorrectAnswers === undefined
+      ? [] : [...incorrectAnswers, correctAnswer];
     const RANGE_ALEATORIETY = 0.5;
     const allAnswers = newAnswers.sort(() => Math.random() - RANGE_ALEATORIETY);
     return (

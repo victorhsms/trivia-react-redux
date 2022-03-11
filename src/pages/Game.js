@@ -16,36 +16,37 @@ class Game extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { dispatch } = this.props;
     dispatch(tokenController());
-    this.startGame();
-  }
-
-  showQuestion= () => {}
-
-  startGame = async () => {
-    const { token, dispatch } = this.props;
+    const { token } = this.props;
     let questions = await getQuestions(token);
     if (questions === []) {
       Storage.removeItem('token');
       dispatch(tokenController());
       questions = await getQuestions(token);
     }
-    console.log(questions);
     this.setState({
       allQuestions: questions,
     });
   }
 
   render() {
-    const { allQuestions } = this.state;
-    // const questionOne = allQuestions[numberQuestion];
-    // console.log(questionOne.question);
+    const { allQuestions, numberQuestion } = this.state;
+    let renderQuestion;
+    if (allQuestions === []) {
+      renderQuestion = [];
+    } else {
+      renderQuestion = [allQuestions[numberQuestion]];
+    }
+    if (renderQuestion[0] === undefined) {
+      renderQuestion.shift();
+    }
+    console.log(renderQuestion);
     return (
       <div>
         <Header />
-        {allQuestions.map((asks, index) => {
+        {renderQuestion.map((asks, index) => {
           const {
             category,
             type,
