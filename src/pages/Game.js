@@ -6,6 +6,7 @@ import getQuestions from '../services/getQuestions';
 import getNewToken from '../services/getNewToken';
 import Question from '../components/Question';
 import Button from '../components/Button';
+import { setScore } from '../actions/index';
 
 const TIME = 1000;
 
@@ -63,6 +64,7 @@ class Game extends Component {
 
   goToNextQuestion = () => {
     const { numberQuestion } = this.state;
+    const { dispatch } = this.props;
     const LAST_QUESTION = 4;
     if (numberQuestion < LAST_QUESTION) {
       this.setState({
@@ -73,10 +75,13 @@ class Game extends Component {
     } else {
       const { history } = this.props;
       history.push('/feedback');
+      this.finalScore();
+      dispatch(setScore(0));
     }
   }
 
-  finalScore = (score, name) => {
+  finalScore = () => {
+    const { score, name } = this.props;
     const imgGravatar = localStorage.getItem('gravatarUrl');
     const currentPlayer = {
       name,
@@ -89,10 +94,10 @@ class Game extends Component {
 
     if (ranking.length !== 0) {
       const newRanking = [...ranking, currentPlayer];
-      localStorage.setItem('ranking', newRanking);
+      localStorage.setItem('ranking', JSON.stringify(newRanking));
     } else {
       const newRanking = [currentPlayer];
-      localStorage.setItem('ranking', newRanking);
+      localStorage.setItem('ranking', JSON.stringify(newRanking));
     }
   }
 
@@ -164,10 +169,15 @@ Game.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
+  score: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   token: state.token,
+  score: state.player.score,
+  name: state.player.name,
 });
 
 export default connect(mapStateToProps)(Game);
