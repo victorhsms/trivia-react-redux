@@ -3,6 +3,7 @@ import getNewToken from '../services/getNewToken';
 export const NEW_PLAYER = 'NEW_PLAYER';
 export const NEW_TOKEN = 'NEW_TOKEN';
 export const SET_SCORE = 'NEW_SCORE';
+export const ADD_ASSERTION = 'ADD_ASSERTION';
 
 export const setNewPlayer = (emailPlayer, namePlayer) => ({
   type: NEW_PLAYER,
@@ -18,6 +19,11 @@ export const setNewToken = (token) => ({
 export const setScore = (newScore) => ({
   type: SET_SCORE,
   score: newScore,
+});
+
+export const addAssertions = (assertion) => ({
+  type: ADD_ASSERTION,
+  assertion,
 });
 
 export const tokenController = () => async (dispatch) => {

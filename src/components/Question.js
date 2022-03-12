@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { scoreController } from '../actions/index';
+import { scoreController, addAssertions } from '../actions/index';
 import Button from './Button';
 import '../App.css';
 
@@ -64,11 +64,13 @@ class Question extends Component {
       name,
       difficulty,
       currentSecond,
+      assertions,
     } = this.props;
     showBtnNext();
     dispatch(scoreController(score, difficulty, currentSecond, name));
 
-    console.log('correto');
+    const newAssertion = assertions + 1;
+    dispatch(addAssertions(newAssertion));
     this.changeColor();
   }
 
@@ -157,9 +159,11 @@ Question.propTypes = {
   score: PropTypes.number.isRequired,
   currentSecond: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
+  assertions: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = (state) => ({
+  assertions: state.player.assertions,
   score: state.player.score,
   name: state.player.name,
 });
