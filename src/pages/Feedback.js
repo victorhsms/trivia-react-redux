@@ -18,12 +18,11 @@ class Feedback extends Component {
   };
 
   render() {
-    const { score } = this.props;
-    const MIN_SCORE = 3;
-    const placar = Number(score);
+    const { assertions, score } = this.props;
+    const MIN_ASSERTIONS = 3;
     let message;
 
-    if (placar < MIN_SCORE) {
+    if (assertions < MIN_ASSERTIONS) {
       message = 'Could be better...';
     } else {
       message = 'Well Done!';
@@ -32,7 +31,9 @@ class Feedback extends Component {
     return (
       <div>
         <Header />
-        <span data-testid="feedback-text">{ message }</span>
+        <p data-testid="feedback-text">{ message }</p>
+        <p data-testid="feedback-total-score">{ score }</p>
+        <p data-testid="feedback-total-question">{ assertions }</p>
         <Button
           textMessage="Ver Ranking"
           id="btn-ranking"
@@ -51,7 +52,8 @@ class Feedback extends Component {
 }
 
 Feedback.propTypes = {
-  score: PropTypes.string.isRequired,
+  assertions: PropTypes.number.isRequired,
+  score: PropTypes.number.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
@@ -59,6 +61,7 @@ Feedback.propTypes = {
 
 const mapStateToProps = (state) => ({
   score: state.player.score,
+  assertions: state.player.assertions,
 });
 
 export default connect(mapStateToProps)(Feedback);

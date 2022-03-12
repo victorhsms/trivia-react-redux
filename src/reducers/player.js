@@ -1,8 +1,8 @@
-import { NEW_PLAYER, SET_SCORE } from '../actions/index';
+import { NEW_PLAYER, SET_SCORE, ADD_ASSERTION } from '../actions/index';
 
 const INITIAL_STATE = {
   name: '',
-  assertions: '',
+  assertions: 0,
   score: 0,
   gravatarEmail: '',
 };
@@ -19,6 +19,11 @@ const playerReducer = (state = INITIAL_STATE, action) => {
     return {
       ...state,
       score: action.score,
+    };
+  case ADD_ASSERTION:
+    return {
+      ...state,
+      assertions: action.assertion,
     };
   default:
     return state;
