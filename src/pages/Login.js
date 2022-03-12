@@ -36,11 +36,11 @@ class Login extends Component {
     }
   }
 
-  startGame = () => {
+  startGame = async () => {
     const { dispatch } = this.props;
     const { nameValue, emailValue } = this.state;
     dispatch(setNewPlayer(emailValue, nameValue));
-    dispatch(tokenController());
+    await dispatch(tokenController());
     this.setState({
       redirectToGame: true,
     });

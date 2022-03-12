@@ -2,6 +2,7 @@ import getNewToken from '../services/getNewToken';
 
 export const NEW_PLAYER = 'NEW_PLAYER';
 export const NEW_TOKEN = 'NEW_TOKEN';
+export const SET_SCORE = 'NEW_SCORE';
 
 export const setNewPlayer = (emailPlayer, namePlayer) => ({
   type: NEW_PLAYER,
@@ -14,12 +15,39 @@ export const setNewToken = (token) => ({
   token,
 });
 
+export const setScore = (newScore) => ({
+  type: SET_SCORE,
+  score: newScore,
+});
+
 export const tokenController = () => async (dispatch) => {
-  let newToken = localStorage.getItem('token');
-  if (newToken === null) {
-    newToken = await getNewToken();
-    localStorage.setItem('token', newToken);
-  }
+  const newToken = await getNewToken();
+  localStorage.setItem('token', newToken);
 
   dispatch(setNewToken(newToken));
+};
+
+export const scoreController = (oldScore,
+  difficulty,
+  currentSecond) => (dispatch) => {
+  const MAX_DIFFICULTY = 3;
+  const BASE_POINT = 10;
+  let variablePoints;
+
+  switch (difficulty) {
+  case 'hard':
+    variablePoints = currentSecond * MAX_DIFFICULTY;
+    break;
+  case 'medium':
+    variablePoints = currentSecond * 2;
+    break;
+  default:
+    variablePoints = currentSecond * 1;
+    break;
+  }
+
+  const total = BASE_POINT + variablePoints;
+  const newScore = oldScore + total;
+
+  dispatch(setScore(newScore));
 };
