@@ -32,6 +32,30 @@ class Question extends Component {
     });
   }
 
+  componentDidUpdate(prevProps) {
+    this.changeAnswers(prevProps);
+  }
+
+  changeAnswers = (prevProps) => {
+    const {
+      correctAnswer,
+      incorrectAnswers,
+    } = this.props;
+
+    const oldCorrectAnswer = prevProps.correctAnswer;
+
+    const newAnswers = incorrectAnswers === undefined
+      ? [] : [...incorrectAnswers, correctAnswer];
+    const RANGE_ALEATORIETY = 0.5;
+    const allAnswers = newAnswers.sort(() => Math.random() - RANGE_ALEATORIETY);
+
+    if (correctAnswer !== oldCorrectAnswer) {
+      this.setState({
+        allAnswers,
+      });
+    }
+  }
+
   onClickCorrectAnswer = () => {
     const {
       showBtnNext,

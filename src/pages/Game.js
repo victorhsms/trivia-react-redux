@@ -51,6 +51,7 @@ class Game extends Component {
         disabledButtons: true,
         activeTime: false,
       });
+      this.showBtnNext();
     }
   }
 
@@ -67,6 +68,7 @@ class Game extends Component {
       this.setState({
         numberQuestion: numberQuestion + 1,
         nextQuestion: false,
+        seconds: 30,
       });
     } else {
       const { history } = this.props;
