@@ -2,8 +2,21 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
+import Button from '../components/Button';
 
 class Feedback extends Component {
+  // Lógica para o botão 'Ver Ranking' após o término do jogo
+  handleClickGoToRanking = () => {
+    const { history } = this.props;
+    history.push('/ranking');
+  };
+
+  // Lógica para o botão de voltar ao início na página de feedback
+  handleClickBackHome = () => {
+    const { history } = this.props;
+    history.push('/');
+  };
+
   render() {
     const { score } = this.props;
     const MIN_SCORE = 3;
@@ -20,6 +33,18 @@ class Feedback extends Component {
       <div>
         <Header />
         <span data-testid="feedback-text">{ message }</span>
+        <Button
+          textMessage="Ver Ranking"
+          id="btn-ranking"
+          disabled={ false }
+          onClick={ this.handleClickGoToRanking }
+        />
+        <Button
+          textMessage="Play Again"
+          id="btn-play-again"
+          disabled={ false }
+          onClick={ this.handleClickBackHome }
+        />
       </div>
     );
   }
@@ -27,6 +52,9 @@ class Feedback extends Component {
 
 Feedback.propTypes = {
   score: PropTypes.string.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
 };
 
 const mapStateToProps = (state) => ({

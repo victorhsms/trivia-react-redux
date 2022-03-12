@@ -18,9 +18,9 @@ class Header extends Component {
           Nome:&nbsp;
           { name }
         </div>
-        <div data-testid="header-score">
+        <div>
           Placar:&nbsp;
-          { score }
+          <spam data-testid="header-score">{ score }</spam>
         </div>
       </div>
 
