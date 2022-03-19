@@ -64,6 +64,7 @@ class Question extends Component {
       currentSecond,
       assertions,
       changeColor,
+      stop,
     } = this.props;
     showBtnNext();
     dispatch(scoreController(score, difficulty, currentSecond, name));
@@ -71,12 +72,14 @@ class Question extends Component {
     const newAssertion = assertions + 1;
     dispatch(addAssertions(newAssertion));
     changeColor();
+    clearInterval(stop);
   }
 
   onClickIncorrectAnswer = () => {
-    const { showBtnNext, changeColor } = this.props;
+    const { showBtnNext, changeColor, stop } = this.props;
     showBtnNext();
     changeColor();
+    clearInterval(stop);
   }
 
   render() {
@@ -157,6 +160,7 @@ Question.propTypes = {
   correctclass: PropTypes.string.isRequired,
   wrongclass: PropTypes.string.isRequired,
   changeColor: PropTypes.func.isRequired,
+  stop: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({

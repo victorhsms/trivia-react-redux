@@ -36,13 +36,17 @@ class Game extends Component {
       allQuestions: questions,
     });
 
-    this.myInterval = setInterval(() => {
-      this.setState((prevState) => ({ seconds: prevState.seconds - 1 }));
-    }, TIME);
+    this.initTimer();
   }
 
   componentDidUpdate() {
     this.stopTime();
+  }
+
+  initTimer = () => {
+    this.myInterval = setInterval(() => {
+      this.setState((prevState) => ({ seconds: prevState.seconds - 1 }));
+    }, TIME);
   }
 
   stopTime = () => {
@@ -54,6 +58,7 @@ class Game extends Component {
         activeTime: false,
       });
       this.showBtnNext();
+      this.changeColor();
     }
   }
 
@@ -80,7 +85,10 @@ class Game extends Component {
         seconds: 30,
         correctclass: '',
         wrongclass: '',
+        disabledButtons: false,
+        activeTime: true,
       });
+      this.initTimer();
     } else {
       const { history } = this.props;
       history.push('/feedback');
@@ -128,7 +136,6 @@ class Game extends Component {
     if (renderQuestion[0] === undefined) {
       renderQuestion.shift();
     }
-    console.log(renderQuestion);
     return (
       <div>
         <Header />
@@ -159,6 +166,7 @@ class Game extends Component {
                 correctclass={ correctclass }
                 wrongclass={ wrongclass }
                 changeColor={ this.changeColor }
+                stop={ this.myInterval }
               />
               <h3>{ `Tempo restante: ${seconds}` }</h3>
             </>
