@@ -4,6 +4,7 @@ export const NEW_PLAYER = 'NEW_PLAYER';
 export const NEW_TOKEN = 'NEW_TOKEN';
 export const SET_SCORE = 'NEW_SCORE';
 export const ADD_ASSERTION = 'ADD_ASSERTION';
+export const DEL_SCORE = 'DEL_SCORE';
 
 export const setNewPlayer = (emailPlayer, namePlayer) => ({
   type: NEW_PLAYER,
