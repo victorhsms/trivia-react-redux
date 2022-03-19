@@ -11,8 +11,6 @@ class Question extends Component {
 
     this.state = {
       allAnswers: [],
-      correctclass: '',
-      wrongclass: '',
     };
   }
 
@@ -65,26 +63,23 @@ class Question extends Component {
       difficulty,
       currentSecond,
       assertions,
+      changeColor,
+      stop,
     } = this.props;
     showBtnNext();
     dispatch(scoreController(score, difficulty, currentSecond, name));
 
     const newAssertion = assertions + 1;
     dispatch(addAssertions(newAssertion));
-    this.changeColor();
+    changeColor();
+    clearInterval(stop);
   }
 
   onClickIncorrectAnswer = () => {
-    const { showBtnNext } = this.props;
+    const { showBtnNext, changeColor, stop } = this.props;
     showBtnNext();
-    this.changeColor();
-  }
-
-  changeColor = () => {
-    this.setState({
-      correctclass: 'correct-answer',
-      wrongclass: 'wrong-answer',
-    });
+    changeColor();
+    clearInterval(stop);
   }
 
   render() {
@@ -96,9 +91,11 @@ class Question extends Component {
       number,
       correctAnswer,
       disabled,
+      correctclass,
+      wrongclass,
     } = this.props;
 
-    const { allAnswers, correctclass, wrongclass } = this.state;
+    const { allAnswers } = this.state;
 
     return (
       <div>
@@ -119,7 +116,7 @@ class Question extends Component {
         <h2
           data-testid="question-text"
         >
-          { `Questão ${number}: `}
+          { `Questão ${number + 1}: `}
           <span>{ question }</span>
         </h2>
         <div
@@ -160,6 +157,10 @@ Question.propTypes = {
   currentSecond: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   assertions: PropTypes.number.isRequired,
+  correctclass: PropTypes.string.isRequired,
+  wrongclass: PropTypes.string.isRequired,
+  changeColor: PropTypes.func.isRequired,
+  stop: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({

@@ -6,7 +6,6 @@ import getQuestions from '../services/getQuestions';
 import getNewToken from '../services/getNewToken';
 import Question from '../components/Question';
 import Button from '../components/Button';
-import { setScore } from '../actions/index';
 
 const TIME = 1000;
 
@@ -21,6 +20,8 @@ class Game extends Component {
       disabledButtons: false,
       activeTime: true,
       nextQuestion: false,
+      correctclass: '',
+      wrongclass: '',
     };
   }
 
@@ -35,13 +36,17 @@ class Game extends Component {
       allQuestions: questions,
     });
 
-    this.myInterval = setInterval(() => {
-      this.setState((prevState) => ({ seconds: prevState.seconds - 1 }));
-    }, TIME);
+    this.initTimer();
   }
 
   componentDidUpdate() {
     this.stopTime();
+  }
+
+  initTimer = () => {
+    this.myInterval = setInterval(() => {
+      this.setState((prevState) => ({ seconds: prevState.seconds - 1 }));
+    }, TIME);
   }
 
   stopTime = () => {
@@ -53,6 +58,7 @@ class Game extends Component {
         activeTime: false,
       });
       this.showBtnNext();
+      this.changeColor();
     }
   }
 
@@ -62,21 +68,31 @@ class Game extends Component {
     });
   }
 
+  changeColor = () => {
+    this.setState({
+      correctclass: 'correct-answer',
+      wrongclass: 'wrong-answer',
+    });
+  }
+
   goToNextQuestion = () => {
     const { numberQuestion } = this.state;
-    const { dispatch } = this.props;
     const LAST_QUESTION = 4;
     if (numberQuestion < LAST_QUESTION) {
       this.setState({
         numberQuestion: numberQuestion + 1,
         nextQuestion: false,
         seconds: 30,
+        correctclass: '',
+        wrongclass: '',
+        disabledButtons: false,
+        activeTime: true,
       });
+      this.initTimer();
     } else {
       const { history } = this.props;
       history.push('/feedback');
       this.finalScore();
-      dispatch(setScore(0));
     }
   }
 
@@ -108,6 +124,8 @@ class Game extends Component {
       seconds,
       disabledButtons,
       nextQuestion,
+      correctclass,
+      wrongclass,
     } = this.state;
     let renderQuestion;
     if (allQuestions === []) {
@@ -118,7 +136,6 @@ class Game extends Component {
     if (renderQuestion[0] === undefined) {
       renderQuestion.shift();
     }
-    console.log(renderQuestion);
     return (
       <div>
         <Header />
@@ -137,7 +154,7 @@ class Game extends Component {
               <Question
                 key={ index }
                 category={ category }
-                number={ index }
+                number={ numberQuestion }
                 type={ type }
                 difficulty={ difficulty }
                 question={ question }
@@ -146,6 +163,10 @@ class Game extends Component {
                 disabled={ disabledButtons }
                 currentSecond={ seconds }
                 showBtnNext={ this.showBtnNext }
+                correctclass={ correctclass }
+                wrongclass={ wrongclass }
+                changeColor={ this.changeColor }
+                stop={ this.myInterval }
               />
               <h3>{ `Tempo restante: ${seconds}` }</h3>
             </>
@@ -171,7 +192,6 @@ Game.propTypes = {
   }).isRequired,
   score: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
-  dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
