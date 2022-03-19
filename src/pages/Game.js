@@ -20,6 +20,8 @@ class Game extends Component {
       disabledButtons: false,
       activeTime: true,
       nextQuestion: false,
+      correctclass: '',
+      wrongclass: '',
     };
   }
 
@@ -61,6 +63,13 @@ class Game extends Component {
     });
   }
 
+  changeColor = () => {
+    this.setState({
+      correctclass: 'correct-answer',
+      wrongclass: 'wrong-answer',
+    });
+  }
+
   goToNextQuestion = () => {
     const { numberQuestion } = this.state;
     const LAST_QUESTION = 4;
@@ -69,6 +78,8 @@ class Game extends Component {
         numberQuestion: numberQuestion + 1,
         nextQuestion: false,
         seconds: 30,
+        correctclass: '',
+        wrongclass: '',
       });
     } else {
       const { history } = this.props;
@@ -103,6 +114,8 @@ class Game extends Component {
       seconds,
       disabledButtons,
       nextQuestion,
+      correctclass,
+      wrongclass,
     } = this.state;
     let renderQuestion;
     if (allQuestions === []) {
@@ -141,6 +154,9 @@ class Game extends Component {
                 disabled={ disabledButtons }
                 currentSecond={ seconds }
                 showBtnNext={ this.showBtnNext }
+                correctclass={ correctclass }
+                wrongclass={ wrongclass }
+                changeColor={ this.changeColor }
               />
               <h3>{ `Tempo restante: ${seconds}` }</h3>
             </>
