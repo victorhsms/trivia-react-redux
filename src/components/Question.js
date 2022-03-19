@@ -113,7 +113,7 @@ class Question extends Component {
         <h2
           data-testid="question-text"
         >
-          { `Questão ${number}: `}
+          { `Questão ${number + 1}: `}
           <span>{ question }</span>
         </h2>
         <div

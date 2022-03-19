@@ -6,7 +6,6 @@ import getQuestions from '../services/getQuestions';
 import getNewToken from '../services/getNewToken';
 import Question from '../components/Question';
 import Button from '../components/Button';
-import { setScore } from '../actions/index';
 
 const TIME = 1000;
 
@@ -73,7 +72,6 @@ class Game extends Component {
 
   goToNextQuestion = () => {
     const { numberQuestion } = this.state;
-    const { dispatch } = this.props;
     const LAST_QUESTION = 4;
     if (numberQuestion < LAST_QUESTION) {
       this.setState({
@@ -87,7 +85,6 @@ class Game extends Component {
       const { history } = this.props;
       history.push('/feedback');
       this.finalScore();
-      dispatch(setScore(0));
     }
   }
 
@@ -150,7 +147,7 @@ class Game extends Component {
               <Question
                 key={ index }
                 category={ category }
-                number={ index }
+                number={ numberQuestion }
                 type={ type }
                 difficulty={ difficulty }
                 question={ question }
@@ -187,7 +184,6 @@ Game.propTypes = {
   }).isRequired,
   score: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
-  dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
